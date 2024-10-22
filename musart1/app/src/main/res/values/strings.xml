@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">musart1</string>
+    <string name="musart">MusArt</string>
+
+    <string-array name="spinner_options">
+        <item>Arte Pixel Art</item>
+        <item>Arte Digital</item>
+        <item>Anime</item>
+        <item>Arte Videojuegos</item>
+        <item>Arte de PATAS</item>
+        <item>Esculturas</item>
+    </string-array>
+</resources>

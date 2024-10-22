@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SensoresActivity">
+
+
+    <TextView
+        android:id="@+id/gyroscopeTextView"
+        android:layout_width="152dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="128dp"
+        android:text="Giroscopio"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/Inicio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inicio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/Acelerometro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Acelerometro"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/proximidadbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Proximidad"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/Acelerometro" />
+
+    <Button
+        android:id="@+id/dbbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Data Base"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/proximidadbtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
