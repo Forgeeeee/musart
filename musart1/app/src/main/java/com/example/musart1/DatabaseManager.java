@@ -21,6 +21,7 @@ public class DatabaseManager {
         values.put("year", student.getYear());
         db.insert("students", null, values);
         db.close();
+        //gfdsdfg
     }
 
     // Método para obtener todos los estudiantes
