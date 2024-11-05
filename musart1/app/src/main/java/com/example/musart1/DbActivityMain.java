@@ -7,10 +7,14 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
+import android.graphics.Bitmap;
+
 
 public class DbActivityMain extends AppCompatActivity {
 
@@ -20,6 +24,7 @@ public class DbActivityMain extends AppCompatActivity {
     private TextView tvResults;
     private static final int PICK_IMAGE_REQUEST = 1;
     private String selectedImagePath = null;
+    private LinearLayout linearLayoutResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +35,9 @@ public class DbActivityMain extends AppCompatActivity {
 
         etImageName = findViewById(R.id.etImageName);
         etImageTag = findViewById(R.id.etImageTag);
-        etImagePath = findViewById(R.id.etImagePath); // Asegúrate de que este EditText esté en el layout db_view.xml
+
         tvResults = findViewById(R.id.tvResults);
+
 
         Button btnInsertImage = findViewById(R.id.btnInsertImage);
         btnInsertImage.setOnClickListener(new View.OnClickListener() {
@@ -52,39 +58,69 @@ public class DbActivityMain extends AppCompatActivity {
         btnGetAllImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ArrayList<Image> images = dbManager.getAllImages();
-                StringBuilder result = new StringBuilder("Imágenes:\n");
-                for (Image image : images) {
-                    result.append("ID: ").append(image.getId())
-                            .append(", Nombre: ").append(image.getName())
-                            .append(", Ruta: ").append(image.getPath())
-                            .append(", Etiqueta: ").append(image.getTag()).append("\n");
+                LinearLayout imageContainer = findViewById(R.id.imageContainer);
+                imageContainer.removeAllViews();
+
+                if (images.isEmpty()) {
+
+                    ImageView placeholderImageView = new ImageView(DbActivityMain.this);
+                    placeholderImageView.setLayoutParams(new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            300
+                    ));
+                    placeholderImageView.setImageResource(R.drawable.placeholder);
+
+
+                    TextView noImagesText = new TextView(DbActivityMain.this);
+                    noImagesText.setText("No hay imágenes disponibles.");
+
+
+                    imageContainer.addView(placeholderImageView);
+                    imageContainer.addView(noImagesText);
+                } else {
+
+                    for (Image image : images) {
+                        ImageView imageView = new ImageView(DbActivityMain.this);
+                        imageView.setLayoutParams(new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                300
+                        ));
+                        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageView.setImageURI(Uri.parse(image.getPath()));
+
+
+                        TextView textView = new TextView(DbActivityMain.this);
+                        textView.setText("Nombre: " + image.getName() + "\nEtiqueta: " + image.getTag());
+
+                        imageContainer.addView(imageView);
+
+                    }
                 }
-                tvResults.setText(result.toString());
             }
         });
 
-        Button btnUpdateImage = findViewById(R.id.btnUpdateImage);
+
+                Button btnUpdateImage = findViewById(R.id.btnUpdateImage);
         btnUpdateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String tag = etImageTag.getText().toString();  // Usando la etiqueta para encontrar la imagen
+                String tag = etImageTag.getText().toString();
                 String name = etImageName.getText().toString();
-                String path = etImagePath.getText().toString();
 
-                if (!tag.isEmpty() && !name.isEmpty() && !path.isEmpty()) {
+
+                if (!tag.isEmpty() && !name.isEmpty() ) {
                     ArrayList<Image> images = dbManager.getImagesByTag(tag);
                     if (!images.isEmpty()) {
-                        Image imageToUpdate = images.get(0);  // Asumiendo que solo actualizamos la primera imagen encontrada
-                        imageToUpdate.setName(name);
-                        imageToUpdate.setPath(path);
+                        Image imageToUpdate = images.get(0);
                         dbManager.updateImage(imageToUpdate);
-                        tvResults.setText("Imagen actualizada: Nombre " + name + ", Ruta: " + path);
+                        tvResults.setText("Imagen actualizada: Nombre " + name );
                     } else {
                         tvResults.setText("No se encontró ninguna imagen con la etiqueta: " + tag);
                     }
                 } else {
-                    tvResults.setText("Por favor, ingresa etiqueta, nombre y ruta");
+                    tvResults.setText("Por favor, ingresa etiqueta y nombre");
                 }
             }
         });
@@ -97,7 +133,7 @@ public class DbActivityMain extends AppCompatActivity {
                 if (!tag.isEmpty()) {
                     ArrayList<Image> images = dbManager.getImagesByTag(tag);
                     if (!images.isEmpty()) {
-                        dbManager.deleteImage(images.get(0).getId());  // Asumiendo que solo eliminamos la primera imagen encontrada
+                        dbManager.deleteImage(images.get(0).getId());
                         tvResults.setText("Imagen eliminada con etiqueta: " + tag);
                     } else {
                         tvResults.setText("No se encontró ninguna imagen con la etiqueta: " + tag);
@@ -108,22 +144,41 @@ public class DbActivityMain extends AppCompatActivity {
             }
         });
 
+        linearLayoutResults = findViewById(R.id.imageContainer);
         Button btnSearchByTag = findViewById(R.id.btnSearchByTag);
+
         btnSearchByTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String tag = etImageTag.getText().toString();
+                linearLayoutResults.removeAllViews();
+
                 if (!tag.isEmpty()) {
                     ArrayList<Image> images = dbManager.getImagesByTag(tag);
-                    StringBuilder result = new StringBuilder("Imágenes con etiqueta " + tag + ":\n");
-                    for (Image image : images) {
-                        result.append("ID: ").append(image.getId())
-                                .append(", Nombre: ").append(image.getName())
-                                .append(", Ruta: ").append(image.getPath()).append("\n");
+
+                    if (images.isEmpty()) {
+                        TextView noImagesText = new TextView(DbActivityMain.this);
+                        noImagesText.setText("No se encontraron imágenes con la etiqueta " + tag);
+                        linearLayoutResults.addView(noImagesText);
+                    } else {
+                        for (Image image : images) {
+                            ImageView imageView = new ImageView(DbActivityMain.this);
+                            imageView.setLayoutParams(new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT));
+                            imageView.setAdjustViewBounds(true);
+                            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+
+                            imageView.setImageURI(Uri.parse(image.getPath()));
+
+                            linearLayoutResults.addView(imageView);
+                        }
                     }
-                    tvResults.setText(result.toString());
                 } else {
-                    tvResults.setText("Por favor, ingresa una etiqueta");
+                    TextView errorText = new TextView(DbActivityMain.this);
+                    errorText.setText("Por favor, ingresa una etiqueta");
+                    linearLayoutResults.addView(errorText);
                 }
             }
         });
@@ -142,13 +197,28 @@ public class DbActivityMain extends AppCompatActivity {
             Uri imageUri = data.getData();
             selectedImagePath = imageUri.toString();
 
-            // Inserta la imagen en la base de datos con el path seleccionado
+
             String name = etImageName.getText().toString();
             String tag = etImageTag.getText().toString();
             Image newImage = new Image(0, name, selectedImagePath, tag);
             dbManager.insertImage(newImage);
 
-            tvResults.setText("Imagen insertada: " + name + ", Etiqueta: " + tag + ", Ruta: " + selectedImagePath);
+
+            LinearLayout imageContainer = findViewById(R.id.imageContainer);
+
+
+            ImageView imageView = new ImageView(DbActivityMain.this);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    300
+            ));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setImageURI(imageUri);
+
+
+            imageContainer.addView(imageView);
+
+
+            tvResults.setText("Imagen insertada: " + name + ", Etiqueta: " + tag);
         }
-    }
-}
+    } }
