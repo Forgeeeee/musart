@@ -7,6 +7,8 @@
         android:name="android.hardware.camera"
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -32,9 +34,6 @@
         <activity android:name=".RecyclerViewActivity" />
         <activity android:name=".camaraView" />
         <activity android:name=".SensoresActivity" />
-        <activity android:name=".AcelerometroView" />
-        <activity android:name=".ProximidadActivity" />
-        <activity android:name=".Student" />
         <activity android:name=".DatabaseManager" />
         <activity android:name=".DbActivityMain" android:exported="true" />
 

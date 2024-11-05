@@ -5,9 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
-
-    // Nombre de la base de datos y versión
-    private static final String DATABASE_NAME = "students.db";
+    private static final String DATABASE_NAME = "databaseimages.db"; //
     private static final int DATABASE_VERSION = 1;
 
     public MyDatabaseHelper(Context context) {
@@ -16,14 +14,19 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE images (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, path TEXT, tag TEXT)");
-
+        // Crear la tabla de imágenes
+        String createImagesTable = "CREATE TABLE IF NOT EXISTS images (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "name TEXT, " +
+                "path TEXT, " +
+                "tag TEXT)";
+        db.execSQL(createImagesTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Si hay una actualización de la base de datos
+        // Manejo de versiones de base de datos (puedes agregar lógica aquí si es necesario)
         db.execSQL("DROP TABLE IF EXISTS images");
-        onCreate(db);
+        onCreate(db); // Vuelve a crear la tabla
     }
 }

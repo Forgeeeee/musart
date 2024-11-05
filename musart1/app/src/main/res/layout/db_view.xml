@@ -16,17 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/etImagePath"
-        android:layout_width="387dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:hint="Ruta"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etImageName" />
-
     <Button
         android:id="@+id/btnInsertImage"
         android:layout_width="wrap_content"
@@ -57,9 +46,9 @@
         android:hint="TAG de la imagen"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.387"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etImagePath" />
+        app:layout_constraintTop_toBottomOf="@+id/etImageName" />
 
     <Button
         android:id="@+id/btnUpdateImage"
@@ -82,18 +71,23 @@
         app:layout_constraintTop_toBottomOf="@+id/btnGetAllImages" />
 
     <ScrollView
-        android:layout_width="398dp"
-        android:layout_height="295dp"
+        android:layout_width="399dp"
+        android:layout_height="332dp"
         android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDeleteImage">
+        app:layout_constraintTop_toBottomOf="@+id/btnDeleteImage"
+        app:layout_constraintVertical_bias="1.0">
 
-        <TextView
-            android:id="@+id/tvResults"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Resultados aparecerán aquí" />
+
+        <LinearLayout
+            android:id="@+id/imageContainer"
+            android:layout_width="399dp"
+            android:layout_height="332dp"
+            android:orientation="vertical" />
+
+
     </ScrollView>
 
     <Button
@@ -102,10 +96,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="76dp"
         android:layout_marginTop="20dp"
-        android:text="Buscar por TAG
-"
+        android:text="Buscar por TAG"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/btnInsertImage"
         app:layout_constraintTop_toBottomOf="@+id/etImageTag" />
+
+    <TextView
+        android:id="@+id/tvResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="29dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDeleteImage" />
 </androidx.constraintlayout.widget.ConstraintLayout>
