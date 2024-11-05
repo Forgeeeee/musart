@@ -1,6 +1,9 @@
 package com.example.musart1;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import android.graphics.Bitmap;
 
@@ -38,6 +43,12 @@ public class DbActivityMain extends AppCompatActivity {
 
         tvResults = findViewById(R.id.tvResults);
 
+        if (ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 1);
+        }
+
 
         Button btnInsertImage = findViewById(R.id.btnInsertImage);
         btnInsertImage.setOnClickListener(new View.OnClickListener() {
@@ -46,10 +57,13 @@ public class DbActivityMain extends AppCompatActivity {
                 String name = etImageName.getText().toString();
                 String tag = etImageTag.getText().toString();
 
+
+
                 if (!name.isEmpty() && !tag.isEmpty()) {
                     openImageSelector();
                 } else {
                     tvResults.setText("Por favor, ingresa nombre y etiqueta");
+
                 }
             }
         });
@@ -58,10 +72,12 @@ public class DbActivityMain extends AppCompatActivity {
         btnGetAllImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Permiso.requestReadExternalStoragePermission(DbActivityMain.this);
                 ArrayList<Image> images = dbManager.getAllImages();
                 LinearLayout imageContainer = findViewById(R.id.imageContainer);
                 imageContainer.removeAllViews();
+
+
 
                 if (images.isEmpty()) {
 
@@ -71,14 +87,8 @@ public class DbActivityMain extends AppCompatActivity {
                             300
                     ));
                     placeholderImageView.setImageResource(R.drawable.placeholder);
-
-
-                    TextView noImagesText = new TextView(DbActivityMain.this);
-                    noImagesText.setText("No hay imágenes disponibles.");
-
-
                     imageContainer.addView(placeholderImageView);
-                    imageContainer.addView(noImagesText);
+
                 } else {
 
                     for (Image image : images) {
@@ -87,12 +97,13 @@ public class DbActivityMain extends AppCompatActivity {
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 300
                         ));
-                        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        imageView.setImageURI(Uri.parse(image.getPath()));
+
+                       // imageView.setImageURI(Uri.parse(image.getPath()));
 
 
-                        TextView textView = new TextView(DbActivityMain.this);
-                        textView.setText("Nombre: " + image.getName() + "\nEtiqueta: " + image.getTag());
+
+                       // tvResults.setText(tvResults.getText()+
+                           //     "\n Nombre: " + image.getName() + "\nEtiqueta: " + image.getTag());
 
                         imageContainer.addView(imageView);
 
@@ -164,13 +175,13 @@ public class DbActivityMain extends AppCompatActivity {
                         for (Image image : images) {
                             ImageView imageView = new ImageView(DbActivityMain.this);
                             imageView.setLayoutParams(new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
                                     LinearLayout.LayoutParams.WRAP_CONTENT));
                             imageView.setAdjustViewBounds(true);
                             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 
-                            imageView.setImageURI(Uri.parse(image.getPath()));
+                           imageView.setImageURI(Uri.parse(image.getPath()));
 
                             linearLayoutResults.addView(imageView);
                         }

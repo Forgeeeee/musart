@@ -50,10 +50,10 @@ public class DatabaseManager {
                 // Verificar que todos los índices sean válidos
                 if (idIndex >= 0 && nameIndex >= 0 && pathIndex >= 0 && tagIndex >= 0) {
                     do {
-                        int id = cursor.getInt(idIndex);
-                        String name = cursor.getString(nameIndex);
-                        String path = cursor.getString(pathIndex);
-                        String tag = cursor.getString(tagIndex);
+                        int id = cursor.getInt(0);
+                        String name = cursor.getString(1);
+                        String path = cursor.getString(2);
+                        String tag = cursor.getString(3);
 
                         Image image = new Image(id, name, path, tag);
                         imageList.add(image);
