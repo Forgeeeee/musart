@@ -7,17 +7,6 @@
     tools:context=".SensoresActivity">
 
 
-    <TextView
-        android:id="@+id/gyroscopeTextView"
-        android:layout_width="152dp"
-        android:layout_height="67dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginEnd="128dp"
-        android:text="Giroscopio"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/Inicio"
         android:layout_width="wrap_content"
@@ -27,28 +16,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/Acelerometro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Acelerometro"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/proximidadbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Proximidad"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/Acelerometro" />
-
-    <Button
         android:id="@+id/dbbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Data Base"
+        android:layout_width="228dp"
+        android:layout_height="123dp"
+        android:layout_marginEnd="92dp"
+        android:layout_marginBottom="376dp"
+        android:text="Administrar Imagenes
+"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/proximidadbtn" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

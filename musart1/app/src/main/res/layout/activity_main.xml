@@ -15,10 +15,10 @@
         android:text="@string/musart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.946"
+        app:layout_constraintHorizontal_bias="0.963"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.067" />
+        app:layout_constraintVertical_bias="0.1" />
 
     <Spinner
         android:id="@+id/mySpinner"
@@ -188,8 +188,10 @@
         android:id="@+id/buttonOpeSensors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sensores"
-        app:layout_constraintStart_toEndOf="@+id/buttonOpenCamara"
+        android:layout_marginEnd="16dp"
+        android:text="Control Imagenes
+"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 

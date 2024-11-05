@@ -1,146 +1,154 @@
 package com.example.musart1;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.ArrayList;
 
 public class DbActivityMain extends AppCompatActivity {
 
-    private DatabaseManager dbManager;
-    private EditText etStudentName, etStudentYear, etStudentId;
-    private TextView tvResults;
 
+    private DatabaseManager dbManager;
+    private EditText etImageName, etImagePath, etImageTag;
+    private TextView tvResults;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private String selectedImagePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.db_view);
 
-        DatabaseManager dbManager = new DatabaseManager(getApplicationContext());
+        dbManager = new DatabaseManager(getApplicationContext());
 
-
-        etStudentName = findViewById(R.id.etStudentName);
-        etStudentYear = findViewById(R.id.etStudentYear);
-        etStudentId = findViewById(R.id.etStudentId);
+        etImageName = findViewById(R.id.etImageName);
+        etImageTag = findViewById(R.id.etImageTag);
+        etImagePath = findViewById(R.id.etImagePath); // Asegúrate de que este EditText esté en el layout db_view.xml
         tvResults = findViewById(R.id.tvResults);
 
-
-        Button btnInsertStudent = findViewById(R.id.btnInsertStudent);
-        btnInsertStudent.setOnClickListener(new View.OnClickListener() {
+        Button btnInsertImage = findViewById(R.id.btnInsertImage);
+        btnInsertImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = etStudentName.getText().toString();
-                String yearString = etStudentYear.getText().toString();
+                String name = etImageName.getText().toString();
+                String tag = etImageTag.getText().toString();
 
-                if (!name.isEmpty() && !yearString.isEmpty()) {
-                    int year = Integer.parseInt(yearString);
-                    Student newStudent = new Student(name, year);
-                    dbManager.insertStudent(newStudent);
-                    tvResults.setText("Estudiante insertado: " + name + ", Año: " + year);
+                if (!name.isEmpty() && !tag.isEmpty()) {
+                    openImageSelector();
                 } else {
-                    tvResults.setText("Por favor, ingresa nombre y año");
+                    tvResults.setText("Por favor, ingresa nombre y etiqueta");
                 }
             }
         });
 
-
-        Button btnGetAllStudents = findViewById(R.id.btnGetAllStudents);
-        btnGetAllStudents.setOnClickListener(new View.OnClickListener() {
+        Button btnGetAllImages = findViewById(R.id.btnGetAllImages);
+        btnGetAllImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Student> students = dbManager.getAllStudents();
-                StringBuilder result = new StringBuilder("Estudiantes:\n");
-                for (Student student : students) {
-                    result.append("ID: ").append(student.getId())
-                            .append(", Nombre: ").append(student.getName())
-                            .append(", Año: ").append(student.getYear()).append("\n");
+                ArrayList<Image> images = dbManager.getAllImages();
+                StringBuilder result = new StringBuilder("Imágenes:\n");
+                for (Image image : images) {
+                    result.append("ID: ").append(image.getId())
+                            .append(", Nombre: ").append(image.getName())
+                            .append(", Ruta: ").append(image.getPath())
+                            .append(", Etiqueta: ").append(image.getTag()).append("\n");
                 }
                 tvResults.setText(result.toString());
             }
         });
 
-
-        Button btnUpdateStudent = findViewById(R.id.btnUpdateStudent);
-        btnUpdateStudent.setOnClickListener(new View.OnClickListener() {
+        Button btnUpdateImage = findViewById(R.id.btnUpdateImage);
+        btnUpdateImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String idString = etStudentId.getText().toString();
-                String name = etStudentName.getText().toString();
-                String yearString = etStudentYear.getText().toString();
+                String tag = etImageTag.getText().toString();  // Usando la etiqueta para encontrar la imagen
+                String name = etImageName.getText().toString();
+                String path = etImagePath.getText().toString();
 
-                if (!idString.isEmpty() && !name.isEmpty() && !yearString.isEmpty()) {
-                    int id = Integer.parseInt(idString);
-                    int year = Integer.parseInt(yearString);
-                    Student updatedStudent = new Student(id, name, year);
-                    dbManager.updateStudent(updatedStudent);
-                    tvResults.setText("Estudiante actualizado: ID " + id + ", Nombre: " + name + ", Año: " + year);
+                if (!tag.isEmpty() && !name.isEmpty() && !path.isEmpty()) {
+                    ArrayList<Image> images = dbManager.getImagesByTag(tag);
+                    if (!images.isEmpty()) {
+                        Image imageToUpdate = images.get(0);  // Asumiendo que solo actualizamos la primera imagen encontrada
+                        imageToUpdate.setName(name);
+                        imageToUpdate.setPath(path);
+                        dbManager.updateImage(imageToUpdate);
+                        tvResults.setText("Imagen actualizada: Nombre " + name + ", Ruta: " + path);
+                    } else {
+                        tvResults.setText("No se encontró ninguna imagen con la etiqueta: " + tag);
+                    }
                 } else {
-                    tvResults.setText("Por favor, ingresa ID, nombre y año");
+                    tvResults.setText("Por favor, ingresa etiqueta, nombre y ruta");
                 }
             }
         });
 
-
-        Button btnDeleteStudent = findViewById(R.id.btnDeleteStudent);
-        btnDeleteStudent.setOnClickListener(new View.OnClickListener() {
+        Button btnDeleteImage = findViewById(R.id.btnDeleteImage);
+        btnDeleteImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String idString = etStudentId.getText().toString();
-                if (!idString.isEmpty()) {
-                    int id = Integer.parseInt(idString);
-                    dbManager.deleteStudent(id);
-                    tvResults.setText("Estudiante eliminado con ID: " + id);
+                String tag = etImageTag.getText().toString();
+                if (!tag.isEmpty()) {
+                    ArrayList<Image> images = dbManager.getImagesByTag(tag);
+                    if (!images.isEmpty()) {
+                        dbManager.deleteImage(images.get(0).getId());  // Asumiendo que solo eliminamos la primera imagen encontrada
+                        tvResults.setText("Imagen eliminada con etiqueta: " + tag);
+                    } else {
+                        tvResults.setText("No se encontró ninguna imagen con la etiqueta: " + tag);
+                    }
                 } else {
-                    tvResults.setText("Por favor, ingresa ID");
+                    tvResults.setText("Por favor, ingresa una etiqueta");
                 }
             }
         });
 
-
-
-
-
-
-
-// Insertar un nuevo estudiante
-        Student newStudent = new Student("Juan", 2);  // Juan está en su segundo año
-        dbManager.insertStudent(newStudent);
-
-// Obtener todos los estudiantes
-        ArrayList<Student> students = dbManager.getAllStudents();
-        for (Student student : students) {
-            System.out.println(student.toString());
-        }
-
-// Actualizar un estudiante
-        Student updatedStudent = new Student(1, "Juan Pérez", 3);  // Actualizamos a tercer año
-        dbManager.updateStudent(updatedStudent);
-
-// Eliminar un estudiante
-        dbManager.deleteStudent(1);  // Suponiendo que el ID es 1
-
-// Obtener un estudiante por su ID
-        Student studentById = dbManager.getStudentById(1);
-        if (studentById != null) {
-            System.out.println("Estudiante encontrado: " + studentById.getName());
-        } else {
-            System.out.println("Estudiante no encontrado");
-        }
-
-// Obtener todos los estudiantes por su year (año)
-        ArrayList<Student> studentsByYear = dbManager.getStudentsByYear(2);
-        for (Student student : studentsByYear) {
-            System.out.println("Estudiante: " + student.getName() + ", Año: " + student.getYear());
-        }
+        Button btnSearchByTag = findViewById(R.id.btnSearchByTag);
+        btnSearchByTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tag = etImageTag.getText().toString();
+                if (!tag.isEmpty()) {
+                    ArrayList<Image> images = dbManager.getImagesByTag(tag);
+                    StringBuilder result = new StringBuilder("Imágenes con etiqueta " + tag + ":\n");
+                    for (Image image : images) {
+                        result.append("ID: ").append(image.getId())
+                                .append(", Nombre: ").append(image.getName())
+                                .append(", Ruta: ").append(image.getPath()).append("\n");
+                    }
+                    tvResults.setText(result.toString());
+                } else {
+                    tvResults.setText("Por favor, ingresa una etiqueta");
+                }
+            }
+        });
     }
 
+    private void openImageSelector() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            selectedImagePath = imageUri.toString();
 
+            // Inserta la imagen en la base de datos con el path seleccionado
+            String name = etImageName.getText().toString();
+            String tag = etImageTag.getText().toString();
+            Image newImage = new Image(0, name, selectedImagePath, tag);
+            dbManager.insertImage(newImage);
+
+            tvResults.setText("Imagen insertada: " + name + ", Etiqueta: " + tag + ", Ruta: " + selectedImagePath);
+        }
+    }
 }

@@ -16,18 +16,14 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Crear tabla de estudiantes
-        String createTable = "CREATE TABLE students (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT, " +
-                "year INTEGER)";
-        db.execSQL(createTable);
+        db.execSQL("CREATE TABLE images (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, path TEXT, tag TEXT)");
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Si hay una actualización de la base de datos
-        db.execSQL("DROP TABLE IF EXISTS students");
+        db.execSQL("DROP TABLE IF EXISTS images");
         onCreate(db);
     }
 }

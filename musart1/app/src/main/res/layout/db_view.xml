@@ -6,88 +6,88 @@
     android:layout_height="match_parent">
 
 
-
     <EditText
-        android:id="@+id/etStudentName"
+        android:id="@+id/etImageName"
         android:layout_width="387dp"
         android:layout_height="53dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:hint="Nombre del Estudiante"
+        android:hint="Nombre de la Imagen"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/etStudentYear"
+        android:id="@+id/etImagePath"
         android:layout_width="387dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
-        android:hint="Año del Estudiante"
+        android:hint="Ruta"
         android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etStudentName" />
+        app:layout_constraintTop_toBottomOf="@+id/etImageName" />
 
     <Button
-        android:id="@+id/btnInsertStudent"
+        android:id="@+id/btnInsertImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Insertar imagen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.061"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etImageTag" />
+
+    <Button
+        android:id="@+id/btnGetAllImages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Insertar Estudiante"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etStudentId" />
-
-    <Button
-        android:id="@+id/btnGetAllStudents"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Obtener Todos los Estudiantes"
+        android:text="Todas las imagenes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnInsertStudent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnInsertImage" />
 
     <EditText
-        android:id="@+id/etStudentId"
+        android:id="@+id/etImageTag"
         android:layout_width="380dp"
         android:layout_height="57dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:hint="ID del Estudiante"
+        android:layout_marginTop="20dp"
+        android:hint="TAG de la imagen"
         android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etStudentYear" />
-
-    <Button
-        android:id="@+id/btnUpdateStudent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:text="Actualizar Estudiante"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGetAllStudents" />
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etImagePath" />
 
     <Button
-        android:id="@+id/btnDeleteStudent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Eliminar Estudiante"
-        app:layout_constraintEnd_toStartOf="@+id/btnUpdateStudent"
-        app:layout_constraintHorizontal_bias="0.794"
+        android:id="@+id/btnUpdateImage"
+        android:layout_width="179dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:text="Actualizar imagen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnGetAllImages" />
+
+    <Button
+        android:id="@+id/btnDeleteImage"
+        android:layout_width="186dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="20dp"
+        android:text="Eliminar imagen"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGetAllStudents" />
+        app:layout_constraintTop_toBottomOf="@+id/btnGetAllImages" />
 
     <ScrollView
-        android:layout_width="388dp"
-        android:layout_height="233dp"
+        android:layout_width="398dp"
+        android:layout_height="295dp"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDeleteStudent">
+        app:layout_constraintTop_toBottomOf="@+id/btnDeleteImage">
 
         <TextView
             android:id="@+id/tvResults"
@@ -95,4 +95,17 @@
             android:layout_height="wrap_content"
             android:text="Resultados aparecerán aquí" />
     </ScrollView>
+
+    <Button
+        android:id="@+id/btnSearchByTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="20dp"
+        android:text="Buscar por TAG
+"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btnInsertImage"
+        app:layout_constraintTop_toBottomOf="@+id/etImageTag" />
 </androidx.constraintlayout.widget.ConstraintLayout>
