@@ -13,90 +13,76 @@ public class DatabaseManager {
         dbHelper = new MyDatabaseHelper(context);
     }
 
-    // Método para insertar un estudiante
-    public void insertStudent(Student student) {
+    // Método para insertar una nueva imagen
+    public void insertImage(Image image) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("name", student.getName());
-        values.put("year", student.getYear());
-        db.insert("students", null, values);
+        values.put("name", image.getName());
+        values.put("path", image.getPath());
+        values.put("tag", image.getTag());
+        db.insert("images", null, values);
         db.close();
-        //gfdsdfg
     }
 
-    // Método para obtener todos los estudiantes
-    public ArrayList<Student> getAllStudents() {
-        ArrayList<Student> studentList = new ArrayList<>();
+    // Método para obtener todas las imágenes
+    public ArrayList<Image> getAllImages() {
+        ArrayList<Image> imageList = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM students", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM images", null);
 
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(0);
                 String name = cursor.getString(1);
-                int year = cursor.getInt(2);
-                Student student = new Student(id, name, year);
-                studentList.add(student);
+                String path = cursor.getString(2);
+                String tag = cursor.getString(3);
+                Image image = new Image(id, name, path, tag);
+                imageList.add(image);
             } while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
-        return studentList;
+        return imageList;
     }
 
-    // Método para actualizar un estudiante
-    public void updateStudent(Student student) {
+    // Método para actualizar una imagen
+    public void updateImage(Image image) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("name", student.getName());
-        values.put("year", student.getYear());
-        db.update("students", values, "id = ?", new String[]{String.valueOf(student.getId())});
+        values.put("name", image.getName());
+        values.put("path", image.getPath());
+        values.put("tag", image.getTag());
+        db.update("images", values, "id = ?", new String[]{String.valueOf(image.getId())});
         db.close();
     }
 
-    // Método para eliminar un estudiante
-    public void deleteStudent(int id) {
+    // Método para eliminar una imagen por ID
+    public void deleteImage(int id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("students", "id = ?", new String[]{String.valueOf(id)});
+        db.delete("images", "id = ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
-    public Student getStudentById(int id) {
+    // Método para obtener imágenes por etiqueta
+    public ArrayList<Image> getImagesByTag(String tag) {
+        ArrayList<Image> imageList = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM students WHERE id = ?", new String[]{String.valueOf(id)});
-
-        if (cursor != null && cursor.moveToFirst()) {
-            String name = cursor.getString(1);
-            int year = cursor.getInt(2);
-            Student student = new Student(id, name, year);
-            cursor.close();
-            db.close();
-            return student;
-        }
-        // Si no se encuentra un estudiante con ese id, devuelve null
-        cursor.close();
-        db.close();
-        return null;
-    }
-
-    public ArrayList<Student> getStudentsByYear(int year) {
-        ArrayList<Student> studentList = new ArrayList<>();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM students WHERE year = ?", new String[]{String.valueOf(year)});
+        Cursor cursor = db.rawQuery("SELECT * FROM images WHERE tag = ?", new String[]{tag});
 
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(0);
                 String name = cursor.getString(1);
-                Student student = new Student(id, name, year);
-                studentList.add(student);
+                String path = cursor.getString(2);
+                Image image = new Image(id, name, path, tag);
+                imageList.add(image);
             } while (cursor.moveToNext());
         }
-
         cursor.close();
         db.close();
-        return studentList;
+        return imageList;
     }
+
 
 
 }
