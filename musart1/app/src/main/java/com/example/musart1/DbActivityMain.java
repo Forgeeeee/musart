@@ -180,7 +180,7 @@ public class DbActivityMain extends AppCompatActivity {
                             imageView.setAdjustViewBounds(true);
                             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-
+//ee
                            imageView.setImageURI(Uri.parse(image.getPath()));
 
                             linearLayoutResults.addView(imageView);
