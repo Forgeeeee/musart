@@ -81,41 +81,7 @@
     </LinearLayout>
 
 
-    <CheckBox
-        android:id="@+id/checkBoxYellow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Amarillo"
-        app:layout_constraintBottom_toTopOf="@+id/checkBoxBlack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.926"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
 
-    <CheckBox
-        android:id="@+id/checkBoxBlack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Negro"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.887"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
-
-    <CheckBox
-        android:id="@+id/checkBoxBlue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Azul"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.857"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.846" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myRecyclerViewButton"
@@ -175,24 +141,6 @@
         app:layout_constraintStart_toEndOf="@+id/buttonShowCard"
         app:layout_constraintTop_toTopOf="@+id/myRecyclerView"
         app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/buttonOpenCamara"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Camara"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonOpeSensors"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="Control Imagenes
-"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private GalleryAdapter galleryAdapter;
-    private CheckBox checkBoxBlack, checkBoxYellow, checkBoxBlue;
+
     private ConstraintLayout mainLayout;
     private ImageView imageView;
     private CardView cardViewImage;
@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout = findViewById(R.id.main);
 
-        checkBoxBlack = findViewById(R.id.checkBoxBlack);
-        checkBoxYellow = findViewById(R.id.checkBoxYellow);
-        checkBoxBlue = findViewById(R.id.checkBoxBlue);
 
 
         imageView = findViewById(R.id.imageView);
@@ -96,70 +93,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        checkBoxBlack.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                changeBackgroundColor(Color.BLACK);
-                checkBoxYellow.setChecked(false);
-                checkBoxBlue.setChecked(false);
-            } else{
-
-                changeBackgroundColor(Color.WHITE);
-                checkBoxYellow.setChecked(false);
-                checkBoxBlue.setChecked(false);
-            }
-        });
-
-        checkBoxYellow.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                changeBackgroundColor(Color.YELLOW);
-                checkBoxBlack.setChecked(false);
-                checkBoxBlue.setChecked(false);
-            }else{
-
-                changeBackgroundColor(Color.WHITE);
-                checkBoxBlack.setChecked(false);
-                checkBoxBlue.setChecked(false);
-            }
-        });
-
-        checkBoxBlue.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                changeBackgroundColor(Color.BLUE);
-                checkBoxBlack.setChecked(false);
-                checkBoxYellow.setChecked(false);
-            }else{
-
-                changeBackgroundColor(Color.WHITE);
-                checkBoxYellow.setChecked(false);
-                checkBoxBlack.setChecked(false);
-            }
-        });
-
-
         Button buttonOpenRecyclerView = findViewById(R.id.buttonOpenRecyclerView);
 
         buttonOpenRecyclerView.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RecyclerViewActivity.class);
             startActivity(intent);
         });
-
-
-        Button buttonOpenSensors = findViewById(R.id.buttonOpeSensors);
-
-        buttonOpenSensors.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SensoresActivity.class);
-            startActivity(intent);
-        });
-
-        Button buttonOpenCamara = findViewById(R.id.buttonOpenCamara);
-
-        buttonOpenCamara.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, camaraView.class);
-            startActivity(intent);
-        });
-
-
-
 
 
 

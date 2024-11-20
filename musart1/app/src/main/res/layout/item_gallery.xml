@@ -147,31 +147,7 @@
 
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="300dp"
-        android:layout_height="2000dp"
-        android:background="@color/cardview_dark_background"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textSize="20dp"
-        android:text="Paso 1 \n
-        1.En un bowl, vierte todos los ingredientes líquidos como la leche, \n
-        huevos, y aceite, para luego agregar los ingredientes secos. A mano, \n
-        bate enérgicamente hasta disolver los grumos de harina, si es necesario, \n
-        puedes pasar la mezcla por un colador y disolver los grumos restantes. \n
-        Paso 2 \n
-        2.Luego calienta una sartén de teflón o antiadherente de diametro mediano, \n
-        vierte ¾ de un cucharón y distribuye por toda la sartén con movimientos circulares \n
-        e inclinados con el mango de la sartén. Cocina durante unos segundos hasta dorar \n
-        sus bordes y voltea. Cocina unos segundos mas y repite el procedimiento hasta acabar la mezcla. \n
-        Paso 3 \n
-        3.Una vez listos, rellénalos uno a uno con una cucharada de manjar NESTLÉ® \n
-        y enróllalos sobre sí mismos, espolvorea azúcar flor y sírvelos de inmediato \n
-         fríos o calientes como más te guste."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
