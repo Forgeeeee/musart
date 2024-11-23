@@ -1,117 +1,112 @@
 package com.example.musart1;
 
-import android.content.Context;
+
+import android.graphics.Color;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
-
-    private final Context context;
-    private final int[][] imageSets;
-    private final float[][] ratings;
+import androidx.annotation.NonNull;
 
 
-    public GalleryAdapter(Context context, int[][] imageSets, float[][] ratings) {
-        this.context = context;
-        this.imageSets = imageSets;
-        this.ratings = ratings;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.io.File;
+import java.util.List;
+
+public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
+
+    private final List<ImageData> imageList;
+    private final OnImageClickListener onImageClickListener;
+
+    public interface OnImageClickListener {
+        void onImageClick(int position, float rating);
     }
 
+    public GalleryAdapter(List<ImageData> imageList, OnImageClickListener onImageClickListener) {
+        this.imageList = imageList;
+        this.onImageClickListener = onImageClickListener;
 
+    }
 
     @NonNull
     @Override
-    public GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_gallery, parent, false);
-        return new GalleryViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_gallery, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
-        int[] images = imageSets[position];
-        float[] imageRatings = ratings[position];
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        ImageData imageData = imageList.get(position);
+
+        if (imageData.getImagePath() != null) {
+
+            Uri imageUri = Uri.parse(imageData.getImagePath());
+
+            Glide.with(holder.itemView.getContext())
+                    .load(imageUri)
+                    .apply(new RequestOptions()
+                            .placeholder(R.drawable.placeholder)
+                            .error(R.drawable.placeholder)
+                            .centerCrop())
+                    .into(holder.imageView);
+        } else {
+            holder.imageView.setImageResource(R.drawable.placeholder);
+        }
+
+        holder.ratingBar.setRating(imageData.getRating());
+
+        if (imageData.isSelected()) {
+            holder.itemView.setBackgroundColor(Color.LTGRAY);
+        } else {
+            holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+        }
 
 
-        holder.image1.setImageResource(images[0]);
-        holder.image2.setImageResource(images[1]);
-        holder.image3.setImageResource(images[2]);
-        holder.image4.setImageResource(images[3]);
-        holder.image5.setImageResource(images[4]);
-
-        holder.ratingBar1.setRating(imageRatings[0]);
-        holder.ratingBar2.setRating(imageRatings[1]);
-        holder.ratingBar3.setRating(imageRatings[2]);
-        holder.ratingBar4.setRating(imageRatings[3]);
-        holder.ratingBar5.setRating(imageRatings[4]);
-
-        holder.ratingBar1.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (fromUser) {
-                imageRatings[0] = rating;
-            }
+        holder.itemView.setOnLongClickListener(v -> {
+            boolean isSelected = !imageData.isSelected();
+            imageData.setSelected(isSelected);
+            notifyItemChanged(position);
+            return true;
         });
 
+        holder.itemView.setOnLongClickListener(v -> {
+            boolean isSelected = !imageData.isSelected();
+            imageData.setSelected(isSelected);
+            notifyItemChanged(position);
 
-        holder.ratingBar2.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (fromUser) {
-                imageRatings[1] = rating;
-            }
+            return true;
         });
 
+        holder.itemView.setOnClickListener(v -> {
 
-        holder.ratingBar3.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (fromUser) {
-                imageRatings[2] = rating;
-            }
-        });
-
-
-        holder.ratingBar4.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (fromUser) {
-                imageRatings[3] = rating;
-            }
-        });
-
-
-        holder.ratingBar5.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (fromUser) {
-                imageRatings[4] = rating;
-            }
+            boolean isSelected = !imageData.isSelected();
+            imageData.setSelected(isSelected);
+            notifyItemChanged(position);
         });
 
     }
 
     @Override
     public int getItemCount() {
-        return imageSets.length;
+        return imageList.size();
     }
 
-    public static class GalleryViewHolder extends RecyclerView.ViewHolder {
-        ImageView image1, image2, image3, image4, image5;
-        RatingBar ratingBar1, ratingBar2, ratingBar3, ratingBar4, ratingBar5;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView imageView;
+        public RatingBar ratingBar;
 
-        public GalleryViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image1 = itemView.findViewById(R.id.image1);
-            image2 = itemView.findViewById(R.id.image2);
-            image3 = itemView.findViewById(R.id.image3);
-            image4 = itemView.findViewById(R.id.image4);
-            image5 = itemView.findViewById(R.id.image5);
-
-            ratingBar1 = itemView.findViewById(R.id.ratingBar1);
-            ratingBar2 = itemView.findViewById(R.id.ratingBar2);
-            ratingBar3 = itemView.findViewById(R.id.ratingBar3);
-            ratingBar4 = itemView.findViewById(R.id.ratingBar4);
-            ratingBar5 = itemView.findViewById(R.id.ratingBar5);
-
+            imageView = itemView.findViewById(R.id.image_view);
+            ratingBar = itemView.findViewById(R.id.rating_bar);
         }
     }
-
-
 }

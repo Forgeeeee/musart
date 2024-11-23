@@ -1,136 +1,135 @@
 package com.example.musart1;
 
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.RatingBar;
+import android.widget.Toast;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 
+public class MainActivity extends AppCompatActivity implements GalleryAdapter.OnImageClickListener {
 
-public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView recyclerView;
+    private ArrayList<ImageData> imageList;
     private GalleryAdapter galleryAdapter;
-
-    private ConstraintLayout mainLayout;
-    private ImageView imageView;
-    private CardView cardViewImage;
-    private Button buttonShowCard;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Spinner mySpinner = findViewById(R.id.mySpinner);
-        recyclerView = findViewById(R.id.myRecyclerView);
+        imageList = new ArrayList<>();
 
-        mainLayout = findViewById(R.id.main);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        galleryAdapter = new GalleryAdapter(imageList, this);
+        recyclerView.setAdapter(galleryAdapter);
 
+        Button buttonAddImage = findViewById(R.id.button_add_image);
+        buttonAddImage.setOnClickListener(v -> openImagePicker());
 
-        imageView = findViewById(R.id.imageView);
-        cardViewImage = findViewById(R.id.cardViewImage);
-        buttonShowCard = findViewById(R.id.buttonShowCard);
+        Button buttonDeleteImages = findViewById(R.id.button_delete_images);
+        buttonDeleteImages.setOnClickListener(v -> deleteSelectedImages());
 
-        buttonShowCard.setOnClickListener(v -> {
-            cardViewImage.setVisibility(View.VISIBLE);
-
-        });
-
-
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.spinner_options, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mySpinner.setAdapter(adapter);
-
-
-        final int[][] option1Images = {
-                {R.drawable.img1, R.drawable.img2, R.drawable.img3, R.drawable.img4, R.drawable.img5},
-
-        };
-
-        final float[][] option1Ratings = {
-                {3.0f, 4.0f, 5.0f, 2.0f, 1.0f},
-                {4.0f, 3.0f, 2.0f, 1.0f, 5.0f}, };
-
-
-        final int[][] option2Images = {
-                {R.drawable.img6, R.drawable.img7, R.drawable.img8, R.drawable.img9, R.drawable.img10},
-        };
-
-        final float[][] option2Ratings = {
-                {3.0f, 4.0f, 5.0f, 2.0f, 1.0f},
-                {4.0f, 3.0f, 2.0f, 1.0f, 5.0f}, };
-
-        mySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    setRecyclerView(option1Images, option1Ratings);
-                } else if (position == 1) {
-                    setRecyclerView(option2Images, option2Ratings);
-                }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-
-        Button buttonOpenRecyclerView = findViewById(R.id.buttonOpenRecyclerView);
-
-        buttonOpenRecyclerView.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, RecyclerViewActivity.class);
+        Button buttonViewAllImages = findViewById(R.id.button_view_all_images);
+        buttonViewAllImages.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ViewAllImagesActivity.class);
             startActivity(intent);
         });
 
 
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
 
+                            addImage(selectedImageUri.toString());
+                        }
+                    }
+                }
+        );
     }
 
 
-
-
-
-    private void setRecyclerView(int[][] images, float[][] ratings){
-        galleryAdapter = new GalleryAdapter(this, images, ratings);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(galleryAdapter);
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String path = cursor.getString(columnIndex);
+            cursor.close();
+            return path;
+        } else {
+            return null;
+        }
     }
 
 
-
-    private void changeBackgroundColor(int color) {
-        mainLayout.setBackgroundColor(color);
-        Toast.makeText(this, "Fondo cambiado", Toast.LENGTH_SHORT).show();
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        imagePickerLauncher.launch(intent);
     }
 
 
+    private void addImage(String imagePath) {
+        Log.d("MainActivity", "Imagen seleccionada: " + imagePath);
 
 
+        ImageData newImage = new ImageData(imagePath, 0.0f);
+        imageList.add(newImage);
+
+        galleryAdapter.notifyItemInserted(imageList.size() - 1);
+
+        saveImageToDatabase(imagePath);
+        Toast.makeText(this, "Imagen agregada", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void saveImageToDatabase(String imagePath) {
+        Log.d("MainActivity", "Guardando imagen en base de datos: " + imagePath);
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.insertImage(imagePath, 0.0f);
+        Toast.makeText(this, "Imagen guardada en la base de datos", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void deleteSelectedImages() {
+        ArrayList<ImageData> toRemove = new ArrayList<>();
+        for (ImageData image : imageList) {
+            if (image.isSelected()) {
+                toRemove.add(image);
+            }
+        }
+        imageList.removeAll(toRemove);
+        galleryAdapter.notifyDataSetChanged();
+        Toast.makeText(this, toRemove.size() + " imagen eliminada", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onImageClick(int position, float rating) {
+        ImageData image = imageList.get(position);
+        image.setRating(rating);
+        Toast.makeText(this, "Calificación actualizada: " + rating, Toast.LENGTH_SHORT).show();
+    }
+
+    private List<ImageData> getImageList() {
+        return new ArrayList<>();
+    }
 }
-
-
-
-
-
-
-
-
-
