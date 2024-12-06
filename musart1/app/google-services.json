@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "109665454967",
+    "firebase_url": "https://musart-285ce-default-rtdb.firebaseio.com",
+    "project_id": "musart-285ce",
+    "storage_bucket": "musart-285ce.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109665454967:android:e0ecf0574f7a21c1c92f72",
+        "android_client_info": {
+          "package_name": "com.example.musart1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR7wfStGhAWrlhwRRg4fdVx8yzExSnSxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

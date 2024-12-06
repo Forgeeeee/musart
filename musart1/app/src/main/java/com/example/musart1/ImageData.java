@@ -5,6 +5,10 @@ public class ImageData {
     private float rating;
     private boolean isSelected;
 
+    public ImageData() {
+
+    }
+
     public ImageData(String imagePath, float rating) {
         this.imagePath = imagePath;
         this.rating = rating;
@@ -35,3 +39,4 @@ public class ImageData {
         isSelected = selected;
     }
 }
+
